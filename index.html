@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Manga Explorer</title>
+	<link rel="stylesheet" href="">
+	
+</head>
+<body>
+
+<script type="text/javascript" src="jquery-1.8.0.min.js"></script>
+<style>
+	.explore img {
+	    width: 90%;
+	}
+	.explore{
+		text-align: center;
+	}
+	</style>
+<script type="text/javascript">
+	$(function() {
+		function getImageUrl (files, i) {
+			if (/^image/.test( files[i].type)){ 
+	            var reader = new FileReader(); 
+	            reader.readAsDataURL(files[i]);
+	 			var img;
+	            reader.onloadend = function(){ 
+
+	                $( ".explore" ).append('<div class="title">'+i+'</div>' );
+	                $( ".explore" ).append('<img src="'+this.result+'" alt="">' );
+	                i++;
+	                if (i <= files.length - 1) {
+	                	getImageUrl(files,i)
+	                };
+	            }
+	           
+	        }
+		}
+	    $("#uploadFile").on("change", function()
+	    {
+	    	i = 0;
+	        var files = !!this.files ? this.files : [];
+	        if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+	        $( ".explore" ).html("");
+	        var sortedFiles = [];
+	 		/*for (var i = 0; i <= files.length - 1; i++) {
+	 			// sortedFiles.push(files[i].name);
+
+	 			getImageUrl(files[i], i);
+	 		};*/
+
+			if ( files.length > 0) {
+            	getImageUrl(files,0);
+            };
+	        // sortedFiles.sort();
+	    });
+	});
+</script>
+<input id="uploadFile" type="file" name="image" class="img" multiple />
+<div class="explore">
+	
+</div>
+</body>
+</html>
