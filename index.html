@@ -3,13 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Manga Explorer</title>
+	<title>One Page Manga Reader</title>
 	<link rel="stylesheet" href="">
-	
-</head>
-<body>
 
-<script type="text/javascript" src="jquery-1.8.0.min.js"></script>
+</head>
+<body class="empty">
+
 <style>
 	.explore img {
 	    width: 90%;
@@ -17,49 +16,82 @@
 	.explore{
 		text-align: center;
 	}
+
+	.showonhover {
+		background:#000;
+		padding:20px;
+		opacity:0.7;
+		color:white;
+		width: 150px;
+		height: 20px;
+		display:block;
+		text-align:center;
+		cursor:pointer;
+	}
+	.empty .showonhover {
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: auto;
+		position: absolute;
+	}
+	.full .showonhover {
+		bottom: 5px;
+		right: 5px;
+		position: fixed;
+	}
+	#uploadFile{
+		display: none;
+	}
 	</style>
 <script type="text/javascript">
-	$(function() {
+	 document.addEventListener("DOMContentLoaded",function() {
 		function getImageUrl (files, i) {
-			if (/^image/.test( files[i].type)){ 
-	            var reader = new FileReader(); 
+			if (/^image/.test( files[i].type)){
+	            var reader = new FileReader();
 	            reader.readAsDataURL(files[i]);
 	 			var img;
-	            reader.onloadend = function(){ 
-
-	                $( ".explore" ).append('<div class="title">'+i+'</div>' );
-	                $( ".explore" ).append('<img src="'+this.result+'" alt="">' );
-	                i++;
-	                if (i <= files.length - 1) {
-	                	getImageUrl(files,i)
-	                };
+	            reader.onloadend = function(){
+	            	var img = document.createElement("img");
+	            	img.setAttribute("src",""+this.result+"");
+	                document.getElementById("explore").appendChild(img);
 	            }
-	           
+
 	        }
+	         i++;
+			if (i <= files.length - 1) {
+				getImageUrl(files,i)
+			};
 		}
-	    $("#uploadFile").on("change", function()
+		document.getElementById("uploadFile").onchange = function()
 	    {
 	    	i = 0;
 	        var files = !!this.files ? this.files : [];
 	        if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
-	        $( ".explore" ).html("");
+	        document.getElementById("explore").innerHTML = "";
 	        var sortedFiles = [];
 	 		/*for (var i = 0; i <= files.length - 1; i++) {
 	 			// sortedFiles.push(files[i].name);
 
 	 			getImageUrl(files[i], i);
 	 		};*/
-
+			var body = document.getElementsByTagName("body")[0];
+			body.className = "full";
 			if ( files.length > 0) {
             	getImageUrl(files,0);
             };
 	        // sortedFiles.sort();
-	    });
+	    };
+	    document.getElementById("showonhover").onclick = function(event) {
+	    	document.getElementById("uploadFile").click();
+	    };
 	});
 </script>
 <input id="uploadFile" type="file" name="image" class="img" multiple />
-<div class="explore">
-	
+<span class="showonhover" id="showonhover">Update Manga</span>
+<div class="explore" id="explore">
+
 </div>
 </body>
 </html>
