@@ -46,23 +46,35 @@
 	}
 	</style>
 <script type="text/javascript">
-	 document.addEventListener("DOMContentLoaded",function() {
-		function getImageUrl (files, i) {
-			if (/^image/.test( files[i].type)){
+	 document.addEventListener("DOMContentLoaded",function()
+	 {
+		function getImageUrl (files, i)
+		{
+			if (/^image/.test( files[i].type))
+			{
 	            var reader = new FileReader();
 	            reader.readAsDataURL(files[i]);
 	 			var img;
 	            reader.onloadend = function(){
 	            	var img = document.createElement("img");
-	            	img.setAttribute("src",""+this.result+"");
+	            	img.setAttribute("src",this.result);
 	                document.getElementById("explore").appendChild(img);
+			         i++;
+					if (i <= files.length - 1)
+					{
+						getImageUrl(files,i)
+					};
 	            }
-
 	        }
-	         i++;
-			if (i <= files.length - 1) {
-				getImageUrl(files,i)
-			};
+	        else
+	        {
+	        	i++;
+				if (i <= files.length - 1)
+				{
+					getImageUrl(files,i)
+				};
+	        }
+
 		}
 		document.getElementById("uploadFile").onchange = function()
 	    {
@@ -78,12 +90,14 @@
 	 		};*/
 			var body = document.getElementsByTagName("body")[0];
 			body.className = "full";
-			if ( files.length > 0) {
+			if ( files.length > 0)
+			{
             	getImageUrl(files,0);
             };
 	        // sortedFiles.sort();
 	    };
-	    document.getElementById("showonhover").onclick = function(event) {
+	    document.getElementById("showonhover").onclick = function(event)
+	    {
 	    	document.getElementById("uploadFile").click();
 	    };
 	});
